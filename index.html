@@ -471,26 +471,21 @@
         if (!endpoint || endpoint.includes('PASTE_YOUR_')) { sendButton.disabled = false; showError('This form is not connected yet. Add your deployed Apps Script /exec URL in the configuration line at the top of this page.'); return; }
 
         const payload = { name: answers.name || '', company: answers.company || '', email: answers.email || '', contactNumber: answers.phone || '', preferredDateTime: answers.datetime || '', source: 'AstraMilo bot' };
-        const encodedPayload = new URLSearchParams(payload);
-        let queued = false;
 
-        // sendBeacon is designed for reliable mobile delivery when the browser suspends a page.
-        if (navigator.sendBeacon) {
-          try { queued = navigator.sendBeacon(endpoint, encodedPayload); } catch (error) { queued = false; }
-        }
-
-        // Keep a standard form POST fallback for browsers without sendBeacon or when it is rejected.
-        if (!queued) {
-          const transport = document.createElement('form');
-          transport.method = 'POST';
-          transport.action = endpoint;
-          transport.target = 'astramilo-transport';
-          transport.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;';
-          Object.entries(payload).forEach(([key, value]) => { const field = document.createElement('input'); field.type = 'hidden'; field.name = key; field.value = value; transport.appendChild(field); });
-          document.body.appendChild(transport);
-          transport.submit();
-          window.setTimeout(() => transport.remove(), 2000);
-        }
+        // A hidden-iframe form POST is the most reliable cross-browser transport for
+        // Google Apps Script. It works identically on desktop and mobile. We deliberately
+        // do NOT use navigator.sendBeacon: on mobile (iOS Safari ITP, in-app webviews) a
+        // cross-origin beacon is often silently dropped while still returning true, which
+        // caused submissions to vanish on phones.
+        const transport = document.createElement('form');
+        transport.method = 'POST';
+        transport.action = endpoint;
+        transport.target = 'astramilo-transport';
+        transport.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;';
+        Object.entries(payload).forEach(([key, value]) => { const field = document.createElement('input'); field.type = 'hidden'; field.name = key; field.value = value; transport.appendChild(field); });
+        document.body.appendChild(transport);
+        transport.submit();
+        window.setTimeout(() => transport.remove(), 2000);
 
         flowState.classList.add('hidden');
         successState.classList.remove('hidden');
