@@ -25,7 +25,7 @@
     }
 
     * { box-sizing: border-box; }
-    html { min-width: 320px; background: var(--cream); }
+    html { min-width: 320px; background: var(--cream); overflow-x: hidden; }
     body {
       min-height: 100vh;
       margin: 0;
@@ -39,7 +39,7 @@
     }
 
     button, input { font: inherit; }
-    button { cursor: pointer; }
+    button { cursor: pointer; touch-action: manipulation; }
     button:focus-visible, input:focus-visible { outline: 3px solid rgba(47, 96, 150, .28); outline-offset: 3px; }
 
     .page {
@@ -113,32 +113,6 @@
       color: var(--muted);
       font-size: 16px;
       line-height: 1.7;
-    }
-
-    .intro-note {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 42px;
-      color: var(--navy);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .07em;
-      line-height: 1.55;
-      text-transform: uppercase;
-    }
-
-    .note-mark {
-      display: grid;
-      width: 38px;
-      height: 38px;
-      flex: 0 0 auto;
-      place-items: center;
-      color: var(--navy);
-      border: 1px solid var(--sand);
-      border-radius: 50%;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 17px;
     }
 
     .scheduler-card {
@@ -246,7 +220,7 @@
 
     .input-row { display: flex; align-items: center; gap: 10px; padding: 5px 5px 5px 16px; background: var(--paper); border: 1px solid #d9e0e5; border-radius: 2px; box-shadow: 0 5px 15px rgba(25, 59, 104, .04); transition: border-color .2s ease, box-shadow .2s ease; }
     .input-row:focus-within { border-color: #8ba7c2; box-shadow: 0 0 0 4px rgba(47, 96, 150, .1); }
-    .input-row input { width: 100%; min-width: 0; padding: 11px 0; color: var(--ink); background: transparent; border: 0; outline: 0; font-size: 14px; }
+    .input-row input { width: 100%; min-width: 0; min-height: 44px; padding: 11px 0; color: var(--ink); background: transparent; border: 0; outline: 0; font-size: 14px; }
     .input-row input::placeholder { color: #a2adb7; }
 
     .send-button { display: grid; width: 42px; height: 39px; flex: 0 0 auto; place-items: center; color: white; background: var(--navy); border: 0; border-radius: 2px; transition: background .2s ease, transform .2s ease; }
@@ -291,11 +265,10 @@
       .eyebrow { justify-content: center; }
       h1 { max-width: 650px; margin: 0 auto; }
       .intro-copy { max-width: 550px; margin-right: auto; margin-left: auto; }
-      .intro-note { justify-content: center; margin-top: 25px; }
     }
 
     @media (max-width: 560px) {
-      .page { width: min(100% - 24px, 520px); }
+      .page { width: min(calc(100% - 24px), 520px); }
       .site-header { min-height: 96px; }
       .logo-lockup { width: 162px; }
       .header-meta { gap: 8px; font-size: 8px; letter-spacing: .1em; }
@@ -305,7 +278,6 @@
       .eyebrow { justify-content: flex-start; margin-bottom: 18px; }
       h1 { font-size: clamp(42px, 12vw, 58px); }
       .intro-copy { font-size: 14px; line-height: 1.6; }
-      .intro-note { justify-content: flex-start; margin-top: 25px; font-size: 9px; }
       .scheduler-card { min-height: 635px; }
       .card-header { min-height: 78px; padding: 16px 18px; }
       .assistant-seal { width: 33px; height: 33px; font-size: 15px; }
@@ -344,9 +316,8 @@
     <main class="main-grid">
       <section class="intro" aria-labelledby="pageTitle">
         <p class="eyebrow">AstraGlobal / Connect</p>
-        <h1 id="pageTitle">Let’s talk about what’s next.</h1>
-        <p class="intro-copy">AstraMilo is your meeting concierge. Share a few details and we’ll connect you with the right people on our leadership team.</p>
-        <div class="intro-note"><span class="note-mark" aria-hidden="true">A</span><span>Human-led conversations.<br />Astra-standard follow-up.</span></div>
+        <h1 id="pageTitle">Share the details. Start the conversation.</h1>
+        <p class="intro-copy">Share a few details and our leadership team will be in touch with a thoughtful next step.</p>
       </section>
 
       <section class="scheduler-card" aria-label="AstraMilo bot meeting scheduler">
@@ -367,14 +338,14 @@
               <div class="bot wave" id="bot" aria-hidden="true">
                 <span class="antenna"></span><span class="bot-head"><span class="ear left"></span><span class="ear right"></span><span class="eyes"><span class="eye"></span><span class="eye"></span></span><span class="mouth"></span></span><span class="neck"></span><span class="body"></span><span class="panel"></span><span class="hand"></span>
               </div>
-              <div class="bot-message" id="botMessage" aria-live="polite">Hello, I’m AstraMilo — the AstraGlobal meeting concierge. I’ll gather a few details and pass your request to our leadership team.</div>
+              <div class="bot-message" id="botMessage" aria-live="polite">Hello, I'm AstraMilo - I'll collect a few details and our leadership team will be in touch.</div>
             </div>
 
             <form id="meetingForm" novalidate>
               <div class="question-block">
-                <p class="question-kicker" id="questionKicker">Let’s begin</p>
-                <h2 class="question-title" id="questionTitle">What’s your name?</h2>
-                <label class="field-label" id="fieldLabel" for="answerInput">Your name</label>
+                <p class="question-kicker" id="questionKicker">Let's begin</p>
+                <h2 class="question-title" id="questionTitle">What is your full name?</h2>
+                <label class="field-label" id="fieldLabel" for="answerInput">Full name</label>
                 <div class="input-row"><input id="answerInput" name="name" type="text" autocomplete="name" placeholder="Type your answer here" required /><button class="send-button" id="sendButton" type="submit" aria-label="Continue"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button></div>
                 <p class="optional-note" id="optionalNote"></p><p class="error-message" id="errorMessage" role="alert"></p>
               </div>
@@ -402,14 +373,14 @@
   <script>
     (() => {
       // Paste the deployed Google Apps Script /exec URL here.
-      const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxXurjhqEzrQO3_g9ZaL-VzE112H-b3tuCOQkEPVvoymArtFYj41eGxJLJzoc6Bkexzg/exec';
+      const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxd4YkARXQy-lOPnATsFS70nkz_EPeNYtZthv_XMMztwh_AM8xZ19Qpmukh7KRhbo2MUw/exec';
 
       const steps = [
-        { key: 'name', label: 'Your name', kicker: 'Let’s begin', question: 'What’s your name?', message: 'Thank you, {value}. Which company are you with?', type: 'text', autocomplete: 'name', placeholder: 'e.g. Alex Morgan', required: true, validate: value => value.length >= 2 ? '' : 'Please enter your name.' },
-        { key: 'company', label: 'Company name', kicker: 'Your organisation', question: 'Where do you work?', message: 'Understood — {value}. What’s the best email for our confirmation?', type: 'text', autocomplete: 'organization', placeholder: 'e.g. Acme Studio', required: true, validate: value => value.length >= 2 ? '' : 'Please enter your company name.' },
-        { key: 'email', label: 'Email address', kicker: 'A way to reach you', question: 'What’s your email address?', message: 'Perfect. What contact number should our team use if needed?', type: 'email', autocomplete: 'email', placeholder: 'e.g. alex@acmestudio.com', required: true, validate: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Please enter a valid email address.' },
-        { key: 'phone', label: 'Contact number', kicker: 'Almost there', question: 'What’s the best contact number?', message: 'Thank you. Would you like to suggest a preferred date and time?', type: 'tel', autocomplete: 'tel', placeholder: 'e.g. +1 (555) 012-3456', required: true, validate: value => value.replace(/\D/g, '').length >= 7 ? '' : 'Please enter a valid contact number.' },
-        { key: 'datetime', label: 'Preferred date & time', kicker: 'One last detail', question: 'When would you prefer to meet?', message: 'That’s everything. I’m sending your request to the AstraGlobal leadership team now.', type: 'datetime-local', autocomplete: 'off', placeholder: '', required: false, validate: value => { if (!value) return ''; return new Date(value) > new Date() ? '' : 'Please choose a future date and time.'; } }
+        { key: 'name', label: 'Full name', kicker: "Let's begin", question: 'What is your full name?', message: 'Thank you, {value}. What is your company name?', type: 'text', autocomplete: 'name', placeholder: 'e.g. Alex Morgan', required: true, validate: value => value.length >= 2 ? '' : 'Please enter your full name.' },
+        { key: 'company', label: 'Company name', kicker: 'Your organisation', question: 'What is your company name?', message: 'Thank you. What is the best email address for your confirmation?', type: 'text', autocomplete: 'organization', placeholder: 'e.g. Acme Studio', required: true, validate: value => value.length >= 2 ? '' : 'Please enter your company name.' },
+        { key: 'email', label: 'Email address', kicker: 'A way to reach you', question: 'What is your email address?', message: 'Perfect. What is the best contact number for our team to use?', type: 'email', autocomplete: 'email', placeholder: 'e.g. alex@acmestudio.com', required: true, validate: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Please enter a valid email address.' },
+        { key: 'phone', label: 'Contact number', kicker: 'Almost there', question: 'What is your contact number?', message: 'Thank you. Would you like to add a preferred date and time?', type: 'tel', autocomplete: 'tel', placeholder: 'e.g. +1 (555) 012-3456', required: true, validate: value => value.replace(/\D/g, '').length >= 7 ? '' : 'Please enter a valid contact number.' },
+        { key: 'datetime', label: 'Preferred date & time', kicker: 'One last detail', question: 'What date and time would you prefer?', message: 'That is everything. I am sending your request to the AstraGlobal leadership team now.', type: 'datetime-local', autocomplete: 'off', placeholder: '', required: false, validate: value => { if (!value) return ''; return new Date(value) > new Date() ? '' : 'Please choose a future date and time.'; } }
       ];
 
       const form = document.getElementById('meetingForm');
@@ -449,6 +420,10 @@
         input.name = step.key;
         input.type = step.type;
         input.autocomplete = step.autocomplete;
+        input.inputMode = step.key === 'phone' ? 'tel' : step.key === 'email' ? 'email' : 'text';
+        input.autocapitalize = step.key === 'email' ? 'none' : 'sentences';
+        input.enterKeyHint = currentStep === steps.length - 1 ? 'send' : 'next';
+        input.setAttribute('aria-label', step.label);
         input.placeholder = step.placeholder;
         input.required = step.required;
         input.value = answers[step.key] || '';
@@ -485,23 +460,38 @@
         addAnswer(step, value);
         errorMessage.textContent = '';
         if (currentStep === steps.length - 1) { submitRequest(); return; }
+        const nextMessage = step.message.replace('{value}', value);
         currentStep += 1;
-        typeBotMessage(() => { botMessage.textContent = steps[currentStep].message.replace('{value}', value); setMood('happy'); renderStep(); });
+        typeBotMessage(() => { botMessage.textContent = nextMessage; setMood('happy'); renderStep(); });
       }
 
       function submitRequest() {
+        sendButton.disabled = true;
         const endpoint = GOOGLE_APPS_SCRIPT_URL.trim();
-        if (!endpoint || endpoint.includes('PASTE_YOUR_')) { showError('This form is not connected yet. Add your deployed Apps Script /exec URL in the configuration line at the top of this page.'); return; }
+        if (!endpoint || endpoint.includes('PASTE_YOUR_')) { sendButton.disabled = false; showError('This form is not connected yet. Add your deployed Apps Script /exec URL in the configuration line at the top of this page.'); return; }
+
         const payload = { name: answers.name || '', company: answers.company || '', email: answers.email || '', contactNumber: answers.phone || '', preferredDateTime: answers.datetime || '', source: 'AstraMilo bot' };
-        const transport = document.createElement('form');
-        transport.method = 'POST';
-        transport.action = endpoint;
-        transport.target = 'astramilo-transport';
-        transport.hidden = true;
-        Object.entries(payload).forEach(([key, value]) => { const field = document.createElement('input'); field.type = 'hidden'; field.name = key; field.value = value; transport.appendChild(field); });
-        document.body.appendChild(transport);
-        transport.submit();
-        window.setTimeout(() => transport.remove(), 1500);
+        const encodedPayload = new URLSearchParams(payload);
+        let queued = false;
+
+        // sendBeacon is designed for reliable mobile delivery when the browser suspends a page.
+        if (navigator.sendBeacon) {
+          try { queued = navigator.sendBeacon(endpoint, encodedPayload); } catch (error) { queued = false; }
+        }
+
+        // Keep a standard form POST fallback for browsers without sendBeacon or when it is rejected.
+        if (!queued) {
+          const transport = document.createElement('form');
+          transport.method = 'POST';
+          transport.action = endpoint;
+          transport.target = 'astramilo-transport';
+          transport.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;';
+          Object.entries(payload).forEach(([key, value]) => { const field = document.createElement('input'); field.type = 'hidden'; field.name = key; field.value = value; transport.appendChild(field); });
+          document.body.appendChild(transport);
+          transport.submit();
+          window.setTimeout(() => transport.remove(), 2000);
+        }
+
         flowState.classList.add('hidden');
         successState.classList.remove('hidden');
         cardFooter.classList.add('hidden');
@@ -509,16 +499,16 @@
         progressText.textContent = 'Complete';
         progressFill.style.width = '100%';
       }
-
       function resetForm() {
         currentStep = 0;
         Object.keys(answers).forEach(key => delete answers[key]);
         answerTrail.innerHTML = '';
         form.reset();
+        sendButton.disabled = false;
         flowState.classList.remove('hidden');
         successState.classList.add('hidden');
         cardFooter.classList.remove('hidden');
-        botMessage.textContent = 'Hello, I’m AstraMilo — the AstraGlobal meeting concierge. I’ll gather a few details and pass your request to our leadership team.';
+        botMessage.textContent = "Hello, I'm AstraMilo - I'll collect a few details and our leadership team will be in touch.";
         setMood('wave');
         renderStep({ animate: false });
       }
